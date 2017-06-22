@@ -1,0 +1,52 @@
+<!DOCKTYPE html>
+<html lang="ja">
+<head>
+	<title>漫符絵本</title>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="targetcanvas">
+	</script>
+</head>
+
+<body>
+<center>
+<script type="text/processing">
+/*
+@pjs preload="top.png, go.png, goon.png";
+crisp="true";
+*/
+
+PImage haikei, go, goon;
+
+void setup() {
+  size(900, 600);
+  
+  haikei = loadImage("top.png");
+  go = loadImage("go.png");
+  goon = loadImage("goon.png");
+  imageMode(CENTER);
+  
+}
+
+void draw() {
+  background(255);
+  image(haikei, 450, 300, 900, 600);
+  image(go, 850, 540, 100, 100);
+  
+  if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570){
+    image(goon, 850, 540, 100, 100);
+  }
+}
+
+void mouseClicked() {
+	if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570){
+		link("1.html");
+	}
+}
+
+</script>
+<canvas style="border:1px solid black;"></canvas>
+<br>
+</center>
+</body>
+</html>
