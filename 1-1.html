@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<title>漫符絵本</title>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="processing-1.4.1.js"></script>
+	<script type="text/processing" data-processing-target="targetcanvas">
+	</script>
+</head>
+
+<body>
+<center>
+<script type="text/processing">
+/* 
+@pjs preload="haikei3.png,manpu5.png,manpu6.png,manpu7.png,waraAnime0.png,waraAnime1.png,okoAnime0.png,okoAnime1.png,iraAnime0.png,iraAnime1.png,go.png,back.png,goon.png,backon.png, home.png, homeon.png";
+crisp="true";
+*/
+
+PImage haikei, go, back, goon, backon, home, homeon;
+
+PImage haikei;
+int[] x, y;
+int numFrames = 3;
+PImage[] manpu = new PImage[numFrames];
+
+int numFrames2 = 2;
+PImage[] waraAnime = new PImage[numFrames2];
+PImage[] okoAnime = new PImage[numFrames2];
+PImage[] iraAnime = new PImage[numFrames2];
+
+int dis = 0;
+int dis2 = 0;
+int dis3 = 0;
+boolean waraflag = false;
+boolean okoflag = false;
+boolean iraflag = false;
+
+int framerate = 60;
+int framecount = 0;
+int framecount2 = 0;
+int framecount3 = 0;
+int timer = 0;
+int timer2 = 0;
+int timer3 = 0;
+
+int selectedIndex = -1;
+
+void setup() {
+ size(900, 600);
+ 
+ haikei = loadImage("haikei3.png");
+ go = loadImage("go.png");
+ back = loadImage("back.png");
+ goon = loadImage("goon.png");
+ backon = loadImage("backon.png");
+ home = loadImage("home.png");
+ homeon = loadImage("homeon.png"); 
+ imageMode(CENTER);
+ 
+ for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i+5, 1) + ".png");
+  }
+  x = new int[3];
+  y = new int[x.length];
+  for (int i = 0; i < x.length; i++) {
+    x[i] = 50;
+    y[i] = 100*(i+2);
+  }
+  
+  for (int i = 0; i < waraAnime.length; i++) {
+    waraAnime[i] = loadImage("waraAnime" + nf(i, 1) + ".png");
+  }
+  for (int i = 0; i < waraAnime.length; i++) {
+    okoAnime[i] = loadImage("okoAnime" + nf(i, 1) + ".png");
+  }
+  for (int i = 0; i < waraAnime.length; i++) {
+    iraAnime[i] = loadImage("iraAnime" + nf(i, 1) + ".png");
+  }
+ 
+}
+
+void draw() {
+  background(255);
+  image(haikei, 450, 300, 900, 600);
+  //image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70); 
+
+  framecount++;
+  framecount2++;
+  framecount3++;
+  
+  if(framecount == framerate/2) {
+    timer++;
+    framecount = 0;
+    dis = dis + 10;
+    if(dis > 800) {
+      dis = 0;
+    }
+  }
+  if(framecount2 == framerate/2) {
+    timer2++;
+    framecount = 0;
+    dis = dis + 10;
+    if(dis > 800) {
+      dis2 = 0;
+    }
+  }
+  if(framecount3 == framerate/2) {
+    timer3++;
+    framecount = 0;
+    dis = dis + 10;
+    if(dis > 800) {
+      dis3 = 0;
+    }
+  }
+  
+  for (int i = 0; i < x.length; i++) {
+    image(manpu[i], x[i], y[i], 60, 60);
+  }
+  
+  if(waraflag == true) {
+    wara();
+  }else if(okoflag == true) {
+    oko();
+  }else if(iraflag == true) {
+    ira();
+  }else{
+  }
+    
+   //マウスオン(矢印,home)
+if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    image(backon, 150, 540, 100, 100);
+  }else if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+   image(homeon, 860, 40, 70, 70);  
+  }
+
+}
+
+void mousePressed() {
+  float minDist = dist(0, 0, 60, 60);
+  for (int i = 0; i < x.length; i++) {
+    float d = dist(x[i], y[i], mouseX, mouseY);
+    if(d < minDist) {
+      minDist = d;
+      selectedIndex = i;
+    }
+  }
+  
+}
+
+void mouseDragged() {
+  if(selectedIndex < 0) return;
+  x[selectedIndex] = mouseX;
+  y[selectedIndex] = mouseY;
+  
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(475, 270, 355, 150);
+    noFill();
+    strokeWeight(5);
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(210, 210, 125, 70);
+    noFill();
+    strokeWeight(5);
+  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(550, 300, 50, 80);
+    rect(650, 300, 50, 80);
+    rect(750, 300, 50, 80);
+    noFill();
+    strokeWeight(5);
+}
+}
+
+void mouseReleased() {
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 465) && (mouseX < 840) && (mouseY > 260) && (mouseY < 440)) {
+    waraflag = true;
+    wara();
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 200) && (mouseX < 350) && (mouseY > 200) && (mouseY < 300)) {
+    okoflag = true;
+    oko();
+  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 540) && (mouseX < 620) && (mouseY > 290) && (mouseY < 400)) {
+    iraflag = true;
+    ira();
+  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 640) && (mouseX < 720) && (mouseY > 290) && (mouseY < 400)) {
+    iraflag = true;
+    ira();
+  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 740) && (mouseX < 820) && (mouseY > 290) && (mouseY < 400)) {
+    iraflag = true;
+    ira();
+  }else{
+    waraflag = false;
+    okoflag = false;
+    iraflag = false;
+  }
+  
+      //マウスを離したら漫符を再配置
+ for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i+5, 1) + ".png");
+  }
+  x = new int[3];
+  y = new int[x.length];
+  for (int i = 0; i < x.length; i++) {
+    x[i] = 50;
+    y[i] = 100*(i+2);
+  }
+  
+  selectedIndex = -1;
+}
+
+void wara() {
+  int frame = timer % numFrames2;
+  image(haikei, 450, 300, 900, 600);
+  
+  image(waraAnime[frame], 500, 300, 800, 600);
+ // image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70); 
+  
+  image(manpu[1], x[1], y[1], 60, 60);
+  image(manpu[2], x[2], y[2], 60, 60);
+}
+
+void oko() {
+  int frame = timer % numFrames2;
+  image(haikei, 450, 300, 900, 600);
+  
+  image(okoAnime[frame], 500, 300, 800, 600);
+  //image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);  
+  
+  image(manpu[0], x[0], y[0], 60, 60);
+  image(manpu[2], x[2], y[2], 60, 60);
+}
+
+void ira() {
+  int frame = timer % numFrames2;
+  image(haikei, 450, 300, 900, 600);
+  
+  image(iraAnime[frame], 500, 300, 800, 600);
+  //image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70); 
+  
+  image(manpu[0], x[0], y[0], 60, 60);
+  image(manpu[1], x[1], y[1], 60, 60);
+}
+
+
+void mouseClicked() {
+    if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    	link("1.html");
+    }
+
+  if(mouseX>=840 && mouseX<=890 && mouseY>=5 && mouseY<=60) {
+      link("index.html");
+    }
+
+  if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+      link("index.html");
+    }    
+
+}
+
+</script>
+<canvas style="border: 1px solid black;"></canvas>
+<br>
+</center>
+</body>
+</html>
