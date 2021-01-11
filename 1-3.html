@@ -12,33 +12,36 @@
 <center>
 <script type="text/processing">
 /* 
-@pjs preload="haikei3.png,manpu5.png,manpu6.png,manpu7.png,waraAnime0.png,waraAnime1.png,okoAnime0.png,okoAnime1.png,iraAnime0.png,iraAnime1.png,go.png,back.png,goon.png,backon.png";
+@pjs preload="haikei5.png,manpu8.png,manpu9.png,ikiAnime0.png,ikiAnime1.png,carAnime0.png,carAnime1.png,carAnime2.png,mukaAnime0.png,mukaAnime1.png,go.png,back.png,goon.png,backon.png,home.png,homeon.png";
 crisp="true";
 */
 
-PImage haikei, go, back, goon, backon;
-
-PImage haikei;
+PImage haikei, go, back, goon, backon, home, homeon;
 int[] x, y;
-int numFrames = 3;
+int numFrames = 2;
 PImage[] manpu = new PImage[numFrames];
 
 int numFrames2 = 2;
-PImage[] waraAnime = new PImage[numFrames2];
-PImage[] okoAnime = new PImage[numFrames2];
-PImage[] iraAnime = new PImage[numFrames2];
+PImage[] ikiAnime = new PImage[numFrames2];
+PImage[] mukaAnime = new PImage[numFrames2];
+
+int numFrames3 = 3;
+PImage[] carAnime = new PImage[numFrames3];
+
 
 int dis = 0;
 int dis2 = 0;
 int dis3 = 0;
-boolean waraflag = false;
-boolean okoflag = false;
-boolean iraflag = false;
+
+boolean ikiflag = false;
+boolean mukaflag = false;
+boolean carflag = false;
 
 int framerate = 60;
 int framecount = 0;
 int framecount2 = 0;
 int framecount3 = 0;
+
 int timer = 0;
 int timer2 = 0;
 int timer3 = 0;
@@ -46,48 +49,51 @@ int timer3 = 0;
 int selectedIndex = -1;
 
 void setup() {
- size(900, 600);
- 
- haikei = loadImage("haikei3.png");
- go = loadImage("go.png");
- back = loadImage("back.png");
- goon = loadImage("goon.png");
- backon = loadImage("backon.png");
- imageMode(CENTER);
- 
- for (int i = 0; i < manpu.length; i++) {
-    manpu[i] = loadImage("manpu" + nf(i+5, 1) + ".png");
-  }
-  x = new int[3];
+  size(900, 600);
+  
+  haikei = loadImage("haikei5.png");
+  go = loadImage("go.png");
+  back = loadImage("back.png");
+  goon = loadImage("goon.png");
+  backon = loadImage("backon.png");
+  home = loadImage("home.png");
+  homeon = loadImage("homeon.png");   
+  imageMode(CENTER);
+  
+  //漫符の配置
+  for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i+8, 1) + ".png");
+  }  
+  x = new int[2];
   y = new int[x.length];
   for (int i = 0; i < x.length; i++) {
     x[i] = 50;
-    y[i] = 100*(i+2);
+    y[i] = 120*(i+2);
   }
   
-  for (int i = 0; i < waraAnime.length; i++) {
-    waraAnime[i] = loadImage("waraAnime" + nf(i, 1) + ".png");
+  //アニメーション画像の配置
+  for(int i = 0; i < ikiAnime.length; i++) {
+  ikiAnime[i] = loadImage("ikiAnime" + nf(i, 1) + ".png");
   }
-  for (int i = 0; i < waraAnime.length; i++) {
-    okoAnime[i] = loadImage("okoAnime" + nf(i, 1) + ".png");
+  for(int i = 0; i < carAnime.length; i++) {
+  carAnime[i] = loadImage("carAnime" + nf(i, 1) + ".png");
   }
-  for (int i = 0; i < waraAnime.length; i++) {
-    iraAnime[i] = loadImage("iraAnime" + nf(i, 1) + ".png");
+  for(int i = 0; i < mukaAnime.length; i++) {
+  mukaAnime[i] = loadImage("mukaAnime" + nf(i, 1) + ".png");
   }
- 
 }
 
 void draw() {
   background(255);
   image(haikei, 450, 300, 900, 600);
-  image(go, 850, 540, 100, 100);
+  //image(go, 850, 540, 100, 100);
   image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
-    framecount++;
-  framecount2++;
-  framecount3++;
-  
-  if(framecount == framerate/2) {
+  //アニメーションの設定
+  framecount++;
+   
+  if(framecount == framerate/2) { //アニメーションのスピード
     timer++;
     framecount = 0;
     dis = dis + 10;
@@ -97,45 +103,48 @@ void draw() {
   }
   if(framecount2 == framerate/2) {
     timer2++;
-    framecount = 0;
-    dis = dis + 10;
-    if(dis > 800) {
+    framecount2 = 0;
+    dis2 = dis2 + 10;
+    if(dis2 > 800) {
       dis2 = 0;
     }
   }
   if(framecount3 == framerate/2) {
     timer3++;
-    framecount = 0;
-    dis = dis + 10;
-    if(dis > 800) {
+    framecount3 = 0;
+    dis3 = dis3 + 10;
+    if(dis3 > 800) {
       dis3 = 0;
     }
   }
   
+  //漫符(配列)
   for (int i = 0; i < x.length; i++) {
-    image(manpu[i], x[i], y[i], 60, 60);
+    image(manpu[i], x[i], y[i],60,60);
   }
   
-  if(waraflag == true) {
-    wara();
-  }else if(okoflag == true) {
-    oko();
-  }else if(iraflag == true) {
-    ira();
+  //flagがtrueになったらアニメーション再生
+  if(ikiflag == true) {
+    iki();
+  }else if(carflag == true) {
+    car();
+  }else if(mukaflag == true) {
+    muka();
   }else{
   }
-    
-    //マウスオン(矢印)
-  if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
-    image(goon, 850, 540, 100, 100);  
-  }else if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+   
+   //マウスオン(矢印,home)
+if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
     image(backon, 150, 540, 100, 100);
+  }else if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+   image(homeon, 860, 40, 70, 70);  
   }
+  
 }
 
 void mousePressed() {
-  float minDist = dist(0, 0, 800, 600);
-  for (int i = 0; i < x.length; i++) {
+  float minDist = dist(0, 0, 60, 60);
+  for(int i = 0; i < x.length; i++) {
     float d = dist(x[i], y[i], mouseX, mouseY);
     if(d < minDist) {
       minDist = d;
@@ -150,98 +159,110 @@ void mouseDragged() {
   x[selectedIndex] = mouseX;
   y[selectedIndex] = mouseY;
   
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX >= 465) && (mouseX <= 840) && (mouseY >= 260) && (mouseY <= 440)) {
-    rect(475, 270, 355, 150);
+  //マウスが指定の位置に入ったら枠を表示
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(400, 370, 80, 70);
+    rect(670, 280, 200, 130);
     noFill();
     strokeWeight(5);
-  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX >= 200) && (mouseX <= 350) && (mouseY >= 200) && (mouseY <= 300)) {
-    rect(210, 210, 125, 70);
-    noFill();
-    strokeWeight(5);
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=540) && (mouseX<=620) && (mouseY>=290) && (mouseY<=400)){
-    rect(550, 300, 50, 80);
-    noFill();
-    strokeWeight(5);
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=640) && (mouseX<=720) && (mouseY>=290) && (mouseY<=400)){
-    rect(650, 300, 50, 80);
-    noFill();
-    strokeWeight(5);
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=740) && (mouseX<=820) && (mouseY>=290) && (mouseY<=400)){
-    rect(750, 300, 50, 80);
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(530, 170, 125, 70);
     noFill();
     strokeWeight(5);
 }
 }
 
 void mouseReleased() {
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 465) && (mouseX < 840) && (mouseY > 260) && (mouseY < 440)) {
-    waraflag = true;
-    wara();
-  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 200) && (mouseX < 350) && (mouseY > 200) && (mouseY < 300)) {
-    okoflag = true;
-    oko();
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 540) && (mouseX < 620) && (mouseY > 290) && (mouseY < 400)) {
-    iraflag = true;
-    ira();
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 640) && (mouseX < 720) && (mouseY > 290) && (mouseY < 400)) {
-    iraflag = true;
-    ira();
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 740) && (mouseX < 820) && (mouseY > 290) && (mouseY < 400)) {
-    iraflag = true;
-    ira();
+  //表示した枠の中に漫符を入れたらflagがtrueに(アニメーション再生)
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 390) && (mouseX < 490) && (mouseY > 360) && (mouseY < 450)) {
+    ikiflag = true;
+    iki();
+  }else if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 660) && (mouseX < 880) && (mouseY>=270) && (mouseY<=420)){
+    carflag = true;
+    car();
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 520) && (mouseX < 680) && (mouseY > 160) && (mouseY < 250)) {
+    mukaflag = true;
+    muka();
   }else{
-    waraflag = false;
-    okoflag = false;
-    iraflag = false;
+    ikiflag = false;
+    mukaflag = false;
+    carflag = false;
   }
+  
+        //マウスを離したら漫符を再配置
+  for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i+8, 1) + ".png");
+  }  
+  x = new int[2];
+  y = new int[x.length];
+  for (int i = 0; i < x.length; i++) {
+    x[i] = 50;
+    y[i] = 120*(i+2);
+  }
+  
   selectedIndex = -1;
 }
 
-void wara() {
+//「吐息」のアニメーション
+void iki() {
   int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
-  
-  image(waraAnime[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
+  image(haikei, 450, 300, 900, 600); 
+  image(ikiAnime[frame], 500, 300, 800, 600);
+  //image(go, 850, 540, 100, 100);
   image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
-  image(manpu[1], x[1], y[1], 60, 60);
-  image(manpu[2], x[2], y[2], 60, 60);
-}
-
-void oko() {
-  int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
+  image(manpu[1], x[1], y[1],60,60);
   
-  image(okoAnime[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
-  image(back, 150, 540, 100, 100);
-  
-  image(manpu[0], x[0], y[0], 60, 60);
-  image(manpu[2], x[2], y[2], 60, 60);
-}
-
-void ira() {
-  int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
-  
-  image(iraAnime[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
-  image(back, 150, 540, 100, 100);
-  
-  image(manpu[0], x[0], y[0], 60, 60);
-  image(manpu[1], x[1], y[1], 60, 60);
 }
 
 
+//「車」のアニメーション
+void car() {
+  int frame = timer % numFrames3;
+  image(haikei, 450, 300, 900, 600); 
+  image(carAnime[frame], 500, 300, 800, 600);
+  image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
+
+  image(manpu[1], x[1], y[1],60,60);
+  
+if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
+   image(goon, 850, 540, 100, 100);  
+  }  
+}
+
+//「湯気」のアニメーション
+void muka() {
+  int frame = timer % numFrames2;
+  image(haikei, 450, 300, 900, 600); 
+  image(mukaAnime[frame], 500, 300, 800, 600);
+  //image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
+  
+  image(manpu[0], x[0], y[0],60,60);
+  
+}
+   
 void mouseClicked() {
-    if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
+    if (carflag==true) {
+	link("2-3.html");
+    }
+    }else if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
     	link("1.html");
     }
-   }
+
+  if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+      link("index.html");
+    } 
+}
 
 </script>
 <canvas style="border: 1px solid black;"></canvas>
 <br>
+</center>
 </body>
 </html>

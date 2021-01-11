@@ -12,11 +12,11 @@
 <center>
 <script type="text/processing">
 /* 
-@pjs preload="haikei.png,manpu0.png,manpu1.png,manpu2.png,gomen0.png,gomen1.png,deredere0.png,deredere1.png,kireru0.png,kireru1.png,go.png,goon.png";
+@pjs preload="haikei.png,manpu0.png,manpu1.png,manpu2.png,gomen0.png,gomen1.png,deredere0.png,deredere1.png,kireru0.png,kireru1.png,go.png,goon.png,back.png,backon.png, home.png, homeon.png";
 crisp="true";
 */
 
-PImage haikei, go, goon;
+PImage haikei, go, goon, back, backon, home, homeon;
 
 int[] x, y;
 int numFrames = 3;
@@ -50,9 +50,13 @@ void setup() {
   haikei = loadImage("haikei.png");
   go = loadImage("go.png");
   goon = loadImage("goon.png");
+  back = loadImage("back.png");
+  backon = loadImage("backon.png");
+  home = loadImage("home.png");
+  homeon = loadImage("homeon.png");  
   imageMode(CENTER);
   
-   //文字の配置
+   //漫符の配置
   for (int i = 0; i < manpu.length; i++) {
     manpu[i] = loadImage("manpu" + nf(i, 1) + ".png");
   }  
@@ -79,6 +83,8 @@ void draw() {
   background(255);
   image(haikei, 450, 300, 900, 600);
   image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);  
   
   //アニメーションの設定
   framecount++;
@@ -125,15 +131,19 @@ void draw() {
   }else{
   }
    
-   //マウスオン(矢印)
+   //マウスオン(矢印,home)
 if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
    image(goon, 850, 540, 100, 100);  
+  }else if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    image(backon, 150, 540, 100, 100);
+  }else if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+   image(homeon, 860, 40, 70, 70);  
   }
   
 }
 
 void mousePressed() {
-  float minDist = dist(0, 0, 800, 600);
+  float minDist = dist(0, 0, 60, 60);
   for(int i = 0; i < x.length; i++) {
     float d = dist(x[i], y[i], mouseX, mouseY);
     if(d < minDist) {
@@ -150,15 +160,15 @@ void mouseDragged() {
   y[selectedIndex] = mouseY;
   
   //マウスが指定の位置に入ったら枠を表示
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=300) && (mouseX<=360) && (mouseY>=220) && (mouseY<=350)){
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
     rect(310, 230, 50, 100);
     noFill();
     strokeWeight(5);
-  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX >= 300) && (mouseX <= 450) && (mouseY >= 270) && (mouseY <= 330)) {
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
     rect(330, 270, 100, 50);
     noFill();
     strokeWeight(5);
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=300) && (mouseX<=360) && (mouseY>=220) && (mouseY<=350)){
+  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
     rect(310, 230, 50, 100);
     noFill();
     strokeWeight(5);
@@ -167,7 +177,7 @@ void mouseDragged() {
 
 void mouseReleased() {
   //表示した枠の中に漫符を入れたらflagがtrueに(アニメーション再生)
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 300) && (mouseX < 360) && (mouseY > 220) && (mouseY < 350)) {
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 300) && (mouseX < 370) && (mouseY > 220) && (mouseY < 350)) {
     aseflag = true;
     ase();
   }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 300) && (mouseX < 450) && (mouseY > 270) && (mouseY < 330)) {
@@ -181,6 +191,18 @@ void mouseReleased() {
     tereflag = false;
     okoflag = false;
   }
+  
+    //マウスを離したら漫符を再配置
+  for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i, 1) + ".png");
+  }  
+  x = new int[3];
+  y = new int[x.length];
+  for (int i = 0; i < x.length; i++) {
+    x[i] = 50;
+    y[i] = 100*(i+2);
+  }
+  
   selectedIndex = -1;
 }
 
@@ -192,6 +214,8 @@ void ase() {
   
   image(gomen[frame], 500, 300, 800, 600);
   image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
     image(manpu[1], x[1], y[1],60,60);
     image(manpu[2], x[2], y[2],60,60); 
@@ -205,6 +229,8 @@ void tere() {
   
   image(deredere[frame], 500, 300, 800, 600);
   image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
   image(manpu[0], x[0], y[0],60,60); 
   image(manpu[2], x[2], y[2],60,60); 
@@ -217,6 +243,8 @@ void oko() {
   
   image(kireru[frame], 500, 300, 800, 600);
   image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
   image(manpu[0], x[0], y[0],60,60);
   image(manpu[1], x[1], y[1],60,60);
@@ -226,15 +254,25 @@ void oko() {
 void mouseClicked() {
     if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
     if (aseflag==true) {
-    	link("1-3.html"); // マウスボタンを押した時にURLを開く
+    	link("1-1.html"); // マウスボタンを押した時にURLを開く
     }else if (tereflag == true) {
     	link("1-2.html");
+    }else if (okoflag == true) {
+    	link("1-3.html");
     }
+  }
+    if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+      link("index.html");
     }
-   }
+
+  if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+      link("index.html");
+    }
+}
 
 </script>
 <canvas style="border: 1px solid black;"></canvas>
 <br>
+</center>
 </body>
 </html>

@@ -12,96 +12,104 @@
 <center>
 <script type="text/processing">
 /* 
-@pjs preload="haikei.png,manpu0.png,manpu1.png,manpu2.png,gomen0.png,gomen1.png,deredere0.png,deredere1.png,kireru0.png,kireru1.png,go.png,goon.png";
+@pjs preload="haikei2.png,manpu3.png,manpu4.png,kirakira0.png,kirakira1.png,lovelove0.png,lovelove1.png,kusyami0.png,kusyami1.png,go.png,back.png,goon.png,backon.png, home.png, homeon.png";
 crisp="true";
 */
 
-PImage haikei, go, goon;
+PImage  haikei, go, back, goon, backon, home, homeon;
 
 int[] x, y;
-int numFrames = 3;
+int numFrames = 2;
 PImage[] manpu = new PImage[numFrames];
 
-int numFrames2 = 2;
-PImage[] gomen = new PImage[numFrames2];
-PImage[] deredere = new PImage[numFrames2];
-PImage[] kireru = new PImage[numFrames2];
+int numFrames2 = 2; //アニメーションのフレーム数
+PImage[] kirakira = new PImage[numFrames2];
+PImage[] lovelove = new PImage[numFrames2];
+PImage[] kusyami = new PImage[numFrames2];
 
 int dis = 0;
 int dis2 = 0;
 int dis3 = 0;
-boolean aseflag = false;
-boolean tereflag = false;
-boolean okoflag = false;
+boolean kiraflag = false;
+boolean loveflag = false;
+boolean kazeflag = false;
 
 int framerate = 60;
 int framecount = 0;
 int framecount2 = 0;
 int framecount3 = 0;
+
 int timer = 0;
 int timer2 = 0;
-int timer3 = 0;
+int timer3= 0;
 
 int selectedIndex = -1;
 
 void setup() {
   size(900, 600);
   
-  haikei = loadImage("haikei.png");
+
+  haikei = loadImage("haikei2.png");
   go = loadImage("go.png");
+  back = loadImage("back.png");
   goon = loadImage("goon.png");
-  imageMode(CENTER);
+  backon = loadImage("backon.png");
+  home = loadImage("home.png");
+  homeon = loadImage("homeon.png");    
   
-   //文字の配置
+  imageMode(CENTER);
   for (int i = 0; i < manpu.length; i++) {
-    manpu[i] = loadImage("manpu" + nf(i, 1) + ".png");
-  }  
-  x = new int[3];
+    manpu[i] = loadImage("manpu" + nf(i+3, 1) + ".png");
+  }
+  
+  x = new int[2];
   y = new int[x.length];
   for (int i = 0; i < x.length; i++) {
     x[i] = 50;
-    y[i] = 100*(i+2);
+    y[i] = 120*(i+2);
   }
   
-  //アニメーション画像の配置
-  for(int i = 0; i < gomen.length; i++) {
-  gomen[i] = loadImage("gomen" + nf(i, 1) + ".png");
+  for (int i = 0; i < kirakira.length; i++) {
+    kirakira[i] = loadImage("kirakira" + nf(i, 1) + ".png");
   }
-  for(int i = 0; i < deredere.length; i++) {
-  deredere[i] = loadImage("deredere" + nf(i, 1) + ".png");
+  for (int i = 0; i < lovelove.length; i++) {
+    lovelove[i] = loadImage("lovelove" + nf(i, 1) + ".png");
   }
-  for(int i = 0; i < kireru.length; i++) {
-  kireru[i] = loadImage("kireru" + nf(i, 1) + ".png");
+  for(int i = 0; i < kusyami.length; i++) {
+   kusyami[i] = loadImage("kusyami" + nf(i, 1) + ".png");
   }
 }
 
 void draw() {
   background(255);
   image(haikei, 450, 300, 900, 600);
-  image(go, 850, 540, 100, 100);
+  //image(go, 850, 540, 100, 100);
+  image(back, 150, 540, 100, 100);
+  image(home, 860, 40, 70, 70);   
   
-  //アニメーションの設定
   framecount++;
   framecount2++;
   framecount3++;
-  
-  if(framecount == framerate/2) { //アニメーションのスピード
-    timer++;
-    framecount = 0;
-    dis = dis + 10;
-    if(dis > 800) {
-      dis = 0;
-    }
-  }
-  if(framecount2 == framerate/2) {
-    timer2++;
-    framecount2 = 0;
-    dis2 = dis2 + 10;
-    if(dis2 > 800) {
-      dis2 = 0;
-    }
-  }
-  if(framecount3 == framerate/2) {
+   //println(framecount);
+   if(framecount == framerate/2){
+     timer++;
+     framecount = 0;
+     dis = dis + 10;
+     if(dis > 800){
+       dis = 0;
+     }
+   }
+   
+   if(framecount2 == framerate/2){
+     timer2++;
+     framecount2 = 0;
+     dis2 = dis2 + 10;
+     if(dis2 > 800){
+       dis2 = 0;
+     }
+   }
+   
+   if(framecount3 == framerate/2) {
     timer3++;
     framecount3 = 0;
     dis3 = dis3 + 10;
@@ -109,132 +117,137 @@ void draw() {
       dis3 = 0;
     }
   }
-  
-  //漫符(配列)
+
+
   for (int i = 0; i < x.length; i++) {
     image(manpu[i], x[i], y[i],60,60);
   }
   
-  //flagがtrueになったらアニメーション再生
-  if(aseflag == true) {
-    ase();
-  }else if(tereflag == true) {
-    tere();
-  }else if(okoflag == true) {
-    oko();
+  if(kiraflag == true) {
+    kira();
+  }else if(loveflag == true) {
+    love(); 
+    }else if(kazeflag == true) {
+    kaze();     
   }else{
   }
-   
-   //マウスオン(矢印)
-if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
-   image(goon, 850, 540, 100, 100);  
+  
+   //マウスオン(矢印,home)
+if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    image(backon, 150, 540, 100, 100);
+  }else if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+   image(homeon, 860, 40, 70, 70);  
   }
   
 }
 
-void mousePressed() {
-  float minDist = dist(0, 0, 800, 600);
-  for(int i = 0; i < x.length; i++) {
+void mousePressed(){
+  float minDist = dist(0, 0, 60, 60);
+  for (int i = 0; i < x.length; i++) {
     float d = dist(x[i], y[i], mouseX, mouseY);
-    if(d < minDist) {
+    if(d < minDist){
       minDist = d;
       selectedIndex = i;
     }
   }
-  
 }
 
-void mouseDragged() {
+void mouseDragged(){
   if(selectedIndex < 0) return;
   x[selectedIndex] = mouseX;
   y[selectedIndex] = mouseY;
   
-  //マウスが指定の位置に入ったら枠を表示
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=300) && (mouseX<=360) && (mouseY>=220) && (mouseY<=350)){
-    rect(310, 230, 50, 100);
+   if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(670, 130, 150, 370);
     noFill();
     strokeWeight(5);
-  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX >= 300) && (mouseX <= 450) && (mouseY >= 270) && (mouseY <= 330)) {
-    rect(330, 270, 100, 50);
-    noFill();
-    strokeWeight(5);
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX>=300) && (mouseX<=360) && (mouseY>=220) && (mouseY<=350)){
-    rect(310, 230, 50, 100);
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX>=100) && (mouseX<=900) && (mouseY>=0) && (mouseY<=600)) {
+    rect(760, 200, 50, 100);
+    rect(700, 250, 50, 50);
     noFill();
     strokeWeight(5);
   }
 }
 
-void mouseReleased() {
-  //表示した枠の中に漫符を入れたらflagがtrueに(アニメーション再生)
-  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 300) && (mouseX < 360) && (mouseY > 220) && (mouseY < 350)) {
-    aseflag = true;
-    ase();
-  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 300) && (mouseX < 450) && (mouseY > 270) && (mouseY < 330)) {
-    tereflag = true;
-    tere();
-  }else if((mouseX == x[2]) && (mouseY == y[2]) && (mouseX > 300) && (mouseX < 360) && (mouseY > 220) && (mouseY < 350)) {
-    okoflag = true;
-    oko();
+void mouseReleased(){
+  if((mouseX == x[0]) && (mouseY == y[0]) && (mouseX > 660) && (mouseX < 820) && (mouseY > 120) && (mouseY < 540)){
+     kiraflag = true;
+     kira();
+  }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 750) && (mouseX < 820) && (mouseY > 190) && (mouseY < 300)){
+     loveflag = true;
+     love();
+       }else if((mouseX == x[1]) && (mouseY == y[1]) && (mouseX > 690) && (mouseX < 740) && (mouseY > 230) && (mouseY < 330)) {
+    kazeflag = true;
+    kaze();
   }else{
-    aseflag = false;
-    tereflag = false;
-    okoflag = false;
+     kiraflag = false;
+     loveflag = false;
+     kazeflag = false;
   }
+  
+        //マウスを離したら漫符を再配置
+  for (int i = 0; i < manpu.length; i++) {
+    manpu[i] = loadImage("manpu" + nf(i+3, 1) + ".png");
+  }
+  
+  x = new int[2];
+  y = new int[x.length];
+  for (int i = 0; i < x.length; i++) {
+    x[i] = 50;
+    y[i] = 120*(i+2);
+  }
+
+  
   selectedIndex = -1;
 }
 
-//「汗」のアニメーション
-void ase() {
-  int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
-  
-  
-  image(gomen[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
-  
+void kira(){	
+    int frame = timer % numFrames2; //現在のフレームをアニメーションのフレーム数で割った余りを代入
+    image(haikei, 450, 300, 900, 600);
+    image(kirakira[frame], 500, 300, 800, 600); //画像を表示
+    //image(go, 850, 540, 100, 100);
+    image(back, 150, 540, 100, 100);
+    image(home, 860, 40, 70, 70);     
+    
     image(manpu[1], x[1], y[1],60,60);
-    image(manpu[2], x[2], y[2],60,60); 
-  
 }
 
-//「照れ」のアニメーション
-void tere() {
-  int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
-  
-  image(deredere[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
-  
-  image(manpu[0], x[0], y[0],60,60); 
-  image(manpu[2], x[2], y[2],60,60); 
+void love(){
+    int frame = timer2 % numFrames2; //現在のフレームをアニメーションのフレーム数で割った余りを代入
+    image(haikei, 450, 300, 900, 600);
+     image(lovelove[frame], 500, 300, 800, 600);//画像を表示
+     //image(go, 850, 540, 100, 100);
+     image(back, 150, 540, 100, 100);
+     image(home, 860, 40, 70, 70);  
+     
+     image(manpu[0], x[0], y[0],60,60);
 }
 
-//「怒る」のアニメーション
-void oko() {
-  int frame = timer % numFrames2;
-  image(haikei, 450, 300, 900, 600);
-  
-  image(kireru[frame], 500, 300, 800, 600);
-  image(go, 850, 540, 100, 100);
-  
-  image(manpu[0], x[0], y[0],60,60);
-  image(manpu[1], x[1], y[1],60,60);
+void kaze(){
+    int frame = timer2 % numFrames2; //現在のフレームをアニメーションのフレーム数で割った余りを代入
+    image(haikei, 450, 300, 900, 600);
+     image(kusyami[frame], 500, 300, 800, 600);//画像を表示
+     //image(go, 850, 540, 100, 100);
+     image(back, 150, 540, 100, 100);
+     image(home, 860, 40, 70, 70);   
+     
+     image(manpu[0], x[0], y[0],60,60);
 }
-
 
 void mouseClicked() {
-    if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570) {
-    if (aseflag==true) {
-    	link("1-3.html"); // マウスボタンを押した時にURLを開く
-    }else if (tereflag == true) {
-    	link("1-2.html");
+    if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+    	link("1.html");
     }
+
+  if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
+      link("index.html");
     }
-   }
+
+}
 
 </script>
 <canvas style="border: 1px solid black;"></canvas>
 <br>
+</center>
 </body>
 </html>
