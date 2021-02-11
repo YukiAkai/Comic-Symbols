@@ -12,7 +12,7 @@
 <center>
 <script type="text/processing">
 /* 
-@pjs preload="haikei2.png,manpu3.png,manpu4.png,kirakira0.png,kirakira1.png,lovelove0.png,lovelove1.png,kusyami0.png,kusyami1.png,go.png,back.png,goon.png,backon.png, home.png, homeon.png";
+@pjs preload="img/haikei2.png,img/manpu3.png,img/manpu4.png,img/kirakira0.png,img/kirakira1.png,img/lovelove0.png,img/lovelove1.png,img/kusyami0.png,img/kusyami1.png,img/go.png,img/goon.png,img/back.png,img/backon.png,img/home.png,img/homeon.png";
 crisp="true";
 */
 
@@ -49,17 +49,17 @@ void setup() {
   size(900, 600);
   
 
-  haikei = loadImage("haikei2.png");
-  go = loadImage("go.png");
-  back = loadImage("back.png");
-  goon = loadImage("goon.png");
-  backon = loadImage("backon.png");
-  home = loadImage("home.png");
-  homeon = loadImage("homeon.png");    
+  haikei = loadImage("img/haikei2.png");
+  go = loadImage("img/go.png");
+  back = loadImage("img/back.png");
+  goon = loadImage("img/goon.png");
+  backon = loadImage("img/backon.png");
+  home = loadImage("img/home.png");
+  homeon = loadImage("img/homeon.png");    
   
   imageMode(CENTER);
   for (int i = 0; i < manpu.length; i++) {
-    manpu[i] = loadImage("manpu" + nf(i+3, 1) + ".png");
+    manpu[i] = loadImage("img/manpu" + nf(i+3, 1) + ".png");
   }
   
   x = new int[2];
@@ -70,13 +70,13 @@ void setup() {
   }
   
   for (int i = 0; i < kirakira.length; i++) {
-    kirakira[i] = loadImage("kirakira" + nf(i, 1) + ".png");
+    kirakira[i] = loadImage("img/kirakira" + nf(i, 1) + ".png");
   }
   for (int i = 0; i < lovelove.length; i++) {
-    lovelove[i] = loadImage("lovelove" + nf(i, 1) + ".png");
+    lovelove[i] = loadImage("img/lovelove" + nf(i, 1) + ".png");
   }
   for(int i = 0; i < kusyami.length; i++) {
-   kusyami[i] = loadImage("kusyami" + nf(i, 1) + ".png");
+    kusyami[i] = loadImage("img/kusyami" + nf(i, 1) + ".png");
   }
 }
 
@@ -132,11 +132,11 @@ void draw() {
   }else{
   }
   
-   //マウスオン(矢印,home)
-if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
+  //マウスオン(矢印,home)
+  if(mouseX>=115 && mouseX<=185 && mouseY>=480 && mouseY<=590) {
     image(backon, 150, 540, 100, 100);
-  }else if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
-   image(homeon, 860, 40, 70, 70);  
+  }else if(mouseX>=830 && mouseX<=890 && mouseY>=5 && mouseY<=75) {
+    image(homeon, 860, 40, 70, 70);  
   }
   
 }
@@ -187,7 +187,7 @@ void mouseReleased(){
   
         //マウスを離したら漫符を再配置
   for (int i = 0; i < manpu.length; i++) {
-    manpu[i] = loadImage("manpu" + nf(i+3, 1) + ".png");
+    manpu[i] = loadImage("img/manpu" + nf(i+3, 1) + ".png");
   }
   
   x = new int[2];
@@ -235,14 +235,12 @@ void kaze(){
 }
 
 void mouseClicked() {
-    if(mouseX>=120 && mouseX<=185 && mouseY>=480 && mouseY<=570) {
-    	link("1.html");
-    }
-
-  if(mouseX>=840 && mouseX<=890 && mouseY>=15 && mouseY<=80) {
-      link("index.html");
-    }
-
+  if(mouseX>=115 && mouseX<=185 && mouseY>=480 && mouseY<=590) {
+    link("1.html");
+  }
+  if(mouseX>=830 && mouseX<=890 && mouseY>=5 && mouseY<=75) {
+    link("index.html");
+  }
 }
 
 </script>

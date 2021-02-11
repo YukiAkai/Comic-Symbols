@@ -12,7 +12,7 @@
 <center>
 <script type="text/processing">
 /*
-@pjs preload="top.png, go.png, goon.png";
+@pjs preload="img/top.png,img/go.png,img/goon.png";
 crisp="true";
 */
 
@@ -21,9 +21,9 @@ PImage haikei, go, goon;
 void setup() {
   size(900, 600);
   
-  haikei = loadImage("top.png");
-  go = loadImage("go.png");
-  goon = loadImage("goon.png");
+  haikei = loadImage("img/top.png");
+  go = loadImage("img/go.png");
+  goon = loadImage("img/goon.png");
   imageMode(CENTER);
   
 }
@@ -33,13 +33,13 @@ void draw() {
   image(haikei, 450, 300, 900, 600);
   image(go, 850, 540, 100, 100);
   
-  if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570){
+  if(mouseX>=815 && mouseX<=890 && mouseY>=480 && mouseY<=590){
     image(goon, 850, 540, 100, 100);
   }
 }
 
 void mouseClicked() {
-	if(mouseX>=820 && mouseX<=890 && mouseY>=480 && mouseY<=570){
+	if(mouseX>=815 && mouseX<=890 && mouseY>=480 && mouseY<=590){
 		link("1.html");
 	}
 }
